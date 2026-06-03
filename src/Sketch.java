@@ -1,9 +1,18 @@
 import processing.core.PApplet;
+import java.util.ArrayList;
 
 /**
- * Template for programs with Processing graphics output.
- * @author Your Name
+ * Destroy astroids using lasers from a space ship and track score
+ * @author Gavin Wong and Christopher Ho
  */
+
+/**
+ * Space Defender - High Score & Penalty Update
+ * - Player loses points if meteors hit the ground
+ * - Game over if the ship is hit OR if score drops below 0
+ * - Tracks the highest score across multiple playthroughs
+ */
+
 public class Sketch extends PApplet {
     public static void main(String[] args) {
         PApplet.main("Sketch");
