@@ -25,9 +25,12 @@ public class Sketch extends PApplet {
     float playerSpeed = 5;
     boolean movingLeft = false;
     boolean movingRight = false;
-
+    
     ArrayList<Float> meteorX;
     ArrayList<Float> meteorY;
+
+    ArrayList<Float> laserX;
+    ArrayList<Float> laserY;
 
     @Override
     public void settings() {
@@ -42,6 +45,8 @@ public class Sketch extends PApplet {
         meteorX = new ArrayList<Float>();
         meteorY = new ArrayList<Float>();
 
+        laserX = new ArrayList<Float>();
+        laserY = new ArrayList<Float>();
     }
 
     @Override
@@ -59,8 +64,9 @@ public class Sketch extends PApplet {
         spawnMeteors();
         updatePlayer();
         updateMeteors();
+        updateLasers();
         checkCollisions();
-        
+
         drawEntities();
         
     }
@@ -86,6 +92,19 @@ public class Sketch extends PApplet {
             if (currentY > height + 50) {
                 meteorX.remove(i);
                 meteorY.remove(i);
+            }
+        }
+    }
+
+    private void updateLasers() {
+        for (int i = laserX.size() - 1; i >= 0; i--) {
+            float currentY = laserY.get(i);
+            currentY -= 10; // Move up
+            laserY.set(i, currentY); 
+
+            if (currentY < 0) {
+                laserX.remove(i);
+                laserY.remove(i);
             }
         }
     }
@@ -121,13 +140,26 @@ public class Sketch extends PApplet {
             circle(meteorX.get(i), meteorY.get(i), 40);
         }
 
+        // Draw Lasers (Green Rectangles)
+        fill(0, 255, 0);
+        for (int i = 0; i < laserX.size(); i++) {
+            rect(laserX.get(i) - 2, laserY.get(i), 4, 15);
+        }
     }
 
     //Input Methods
 
     public void keyPressed() {
-        if (keyCode == LEFT) movingLeft = true;
-        if (keyCode == RIGHT) movingRight = true;
+        if (keyCode == LEFT) {
+            movingLeft = true;
+        }
+        if (keyCode == RIGHT) {
+            movingRight = true;
+        }
+        if (key == ' ') {
+            laserX.add(playerX);
+            laserY.add(playerY - 20); 
+        }
     }
     public void keyReleased() {
         if (keyCode == LEFT) movingLeft = false;
