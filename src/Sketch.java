@@ -70,6 +70,11 @@ public class Sketch extends PApplet {
 
         drawEntities();
         
+        // Draw basic score
+        fill(255);
+        textSize(20);
+        textAlign(LEFT, BASELINE);
+        text("Score: " + score, 20, 30);
     }
 
     //Core Mechanics (Update Methods)
