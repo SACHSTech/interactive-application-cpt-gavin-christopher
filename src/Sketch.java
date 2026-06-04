@@ -19,6 +19,7 @@ public class Sketch extends PApplet {
     }
 
     // CORE VARIABLES
+    boolean isGameOver = false;
     float playerX;
     float playerY;
     float playerSpeed = 5;
@@ -46,9 +47,19 @@ public class Sketch extends PApplet {
     @Override
     public void draw() {
         background(0); // Plain black background
+
+        if (isGameOver) {
+            fill(255, 0, 0);
+            textSize(50);
+            textAlign(CENTER, CENTER);
+            text("GAME OVER", width / 2f, height / 2f);
+            return; // Stop running the rest of the game
+        }
+
         spawnMeteors();
         updatePlayer();
         updateMeteors();
+        checkCollisions();
         
         drawEntities();
         
@@ -85,7 +96,18 @@ public class Sketch extends PApplet {
             meteorY.add(-50f);
         }
     }
+    private void checkCollisions() {
+        for (int j = meteorX.size() - 1; j >= 0; j--) {
+            float mX = meteorX.get(j);
+            float mY = meteorY.get(j);
+            float mSize = 40;
 
+            // 1. Check if meteor hit PLAYER
+            if (dist(playerX, playerY, mX, mY) < 20) {
+                isGameOver = true;
+            }
+        }
+    }
     //Basic Drawing
 
     private void drawEntities() {
