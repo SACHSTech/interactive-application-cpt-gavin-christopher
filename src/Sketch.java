@@ -58,7 +58,7 @@ public class Sketch extends PApplet {
             fill(255, 0, 0);
             textSize(50);
             textAlign(CENTER, CENTER);
-            text("GAME OVER\nscore: " + score, width / 2f, height / 2f);
+            text("GAME OVER\nscore: " + score + "\nPress R to Restart", width / 2f, height / 2f);
             return; // Stop running the rest of the game
         }
 
@@ -182,6 +182,16 @@ public class Sketch extends PApplet {
             laserX.add(playerX);
             laserY.add(playerY - 20); 
         }
+
+        if (isGameOver && (key == 'r' || key == 'R')) {
+            isGameOver = false;
+            score = 0; 
+            playerX = width / 2f;
+            
+            laserX.clear(); laserY.clear();
+            meteorX.clear(); meteorY.clear();
+        }
+
     }
     public void keyReleased() {
         if (keyCode == LEFT) movingLeft = false;
