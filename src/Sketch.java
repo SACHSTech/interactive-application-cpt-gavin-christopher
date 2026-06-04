@@ -19,6 +19,7 @@ public class Sketch extends PApplet {
     }
 
     // CORE VARIABLES
+    int score = 0;
     boolean isGameOver = false;
     float playerX;
     float playerY;
@@ -57,7 +58,7 @@ public class Sketch extends PApplet {
             fill(255, 0, 0);
             textSize(50);
             textAlign(CENTER, CENTER);
-            text("GAME OVER", width / 2f, height / 2f);
+            text("GAME OVER\nscore: " + score, width / 2f, height / 2f);
             return; // Stop running the rest of the game
         }
 
@@ -124,6 +125,22 @@ public class Sketch extends PApplet {
             // 1. Check if meteor hit PLAYER
             if (dist(playerX, playerY, mX, mY) < 20) {
                 isGameOver = true;
+            }
+            // 2. Check if LASER hit meteor
+            for (int i = laserX.size() - 1; i >= 0; i--) {
+                float lX = laserX.get(i);
+                float lY = laserY.get(i);
+
+                if (dist(lX, lY, mX, mY) < mSize / 2f) { 
+                    score += 10; // 10 points per hit
+                    
+                    // Remove both the laser and the meteor
+                    laserX.remove(i);
+                    laserY.remove(i);
+                    meteorX.remove(j);
+                    meteorY.remove(j);
+                    break; 
+                }
             }
         }
     }
