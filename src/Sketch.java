@@ -29,6 +29,10 @@ public class Sketch extends PApplet {
     
     ArrayList<Float> meteorX;
     ArrayList<Float> meteorY;
+    ArrayList<Integer> meteorHP;
+    ArrayList<Integer> meteorMaxHP;
+    ArrayList<Float> meteorSize;
+    ArrayList<Float> meteorSpeed;
 
     ArrayList<Float> laserX;
     ArrayList<Float> laserY;
@@ -48,6 +52,13 @@ public class Sketch extends PApplet {
 
         laserX = new ArrayList<Float>();
         laserY = new ArrayList<Float>();
+
+        meteorHP = new ArrayList<Integer>();
+        meteorMaxHP = new ArrayList<Integer>();
+        meteorSize = new ArrayList<Float>();
+        meteorSpeed = new ArrayList<Float>();
+
+        
     }
 
     @Override
@@ -91,13 +102,35 @@ public class Sketch extends PApplet {
     private void updateMeteors() {
         for (int i = meteorX.size() - 1; i >= 0; i--) {
             float currentY = meteorY.get(i);
-            currentY += 3; // Move down (constant speed)
+            float currentX = meteorX.get(i);
+            float speed = meteorSpeed.get(i);
+            
+            currentY += speed; 
             meteorY.set(i, currentY); 
 
-            // Despawn if it falls off the screen
-            if (currentY > height + 50) {
-                meteorX.remove(i);
-                meteorY.remove(i);
+            int hp = meteorHP.get(i);
+            float size = meteorSize.get(i);
+
+            if (hp == 3) fill(180, 60, 60);       
+            else if (hp == 2) fill(180, 130, 60); 
+            else fill(120);                       
+            
+            circle(currentX, currentY, size);
+            
+            fill(0, 0, 0, 60); 
+            circle(currentX - size/4, currentY - size/4, size/3f);
+            circle(currentX + size/5, currentY + size/5, size/4f);
+
+            // PENALTY LOGIC: Meteor hits the ground
+            if (currentY > height + (size / 2)) {
+                // Lose 10 points for every tier of HP the meteor had
+                score -= (meteorMaxHP.get(i) * 10); 
+                removeMeteor(i);
+                
+                // Check if score dropped below 0
+                if (score < 0) {
+                    isGameOver = true;
+                }
             }
         }
     }
@@ -108,10 +141,13 @@ public class Sketch extends PApplet {
             currentY -= 10; // Move up
             laserY.set(i, currentY); 
 
+            fill(0, 255, 0);
+            rect(laserX.get(i) - 2, currentY, 4, 15, 5); 
+
             if (currentY < 0) {
-                laserX.remove(i);
-                laserY.remove(i);
+                removeLaser(i);
             }
+
         }
     }
 
@@ -119,8 +155,38 @@ public class Sketch extends PApplet {
         if (random(100) < 2) { // 2% chance to spawn per frame
             meteorX.add(random(30, width - 30));
             meteorY.add(-50f);
+
+            int randomHP = (int) random(1, 4);
+            meteorHP.add(randomHP);
+            meteorMaxHP.add(randomHP);
+            
+            if (randomHP == 3) {
+                meteorSize.add(90f);
+                meteorSpeed.add(1.5f);
+            } else if (randomHP == 2) {
+                meteorSize.add(55f);
+                meteorSpeed.add(2.5f);
+            } else {
+                meteorSize.add(35f);
+                meteorSpeed.add(4f);
+            }
         }
     }
+
+    private void removeLaser(int index) {
+        laserX.remove(index);
+        laserY.remove(index);
+    }
+
+    private void removeMeteor(int index) {
+        meteorX.remove(index);
+        meteorY.remove(index);
+        meteorHP.remove(index);
+        meteorMaxHP.remove(index);
+        meteorSize.remove(index);
+        meteorSpeed.remove(index);
+    }
+
     private void checkCollisions() {
         for (int j = meteorX.size() - 1; j >= 0; j--) {
             float mX = meteorX.get(j);
@@ -128,22 +194,27 @@ public class Sketch extends PApplet {
             float mSize = 40;
 
             // 1. Check if meteor hit PLAYER
-            if (dist(playerX, playerY, mX, mY) < 20) {
+            float distToPlayer = dist(playerX, playerY, mX, mY);
+            if (distToPlayer < (mSize / 2f + 15)) { 
                 isGameOver = true;
             }
+
             // 2. Check if LASER hit meteor
             for (int i = laserX.size() - 1; i >= 0; i--) {
                 float lX = laserX.get(i);
                 float lY = laserY.get(i);
 
-                if (dist(lX, lY, mX, mY) < mSize / 2f) { 
-                    score += 10; // 10 points per hit
-                    
-                    // Remove both the laser and the meteor
-                    laserX.remove(i);
-                    laserY.remove(i);
-                    meteorX.remove(j);
-                    meteorY.remove(j);
+                float distance = dist(lX, lY, mX, mY);
+
+                if (distance < mSize / 2f) { 
+                    int currentHP = meteorHP.get(j);
+                    meteorHP.set(j, currentHP - 1); 
+                    removeLaser(i); 
+
+                    if (meteorHP.get(j) <= 0) {
+                        score += (meteorMaxHP.get(j) * 10); 
+                    removeMeteor(j);
+                    }
                     break; 
                 }
             }
@@ -155,18 +226,6 @@ public class Sketch extends PApplet {
         // Draw Player (White Triangle)
         fill(255); 
         triangle(playerX, playerY - 20, playerX - 20, playerY + 20, playerX + 20, playerY + 20);
-        
-        // Draw Meteors (Red Circles)
-        fill(255, 50, 50);
-        for (int i = 0; i < meteorX.size(); i++) {
-            circle(meteorX.get(i), meteorY.get(i), 40);
-        }
-
-        // Draw Lasers (Green Rectangles)
-        fill(0, 255, 0);
-        for (int i = 0; i < laserX.size(); i++) {
-            rect(laserX.get(i) - 2, laserY.get(i), 4, 15);
-        }
     }
 
     //Input Methods
