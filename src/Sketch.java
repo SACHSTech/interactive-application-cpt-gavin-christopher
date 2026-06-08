@@ -20,6 +20,7 @@ public class Sketch extends PApplet {
 
     // CORE VARIABLES
     int score = 0;
+    int highScore = 0;
     boolean isGameOver = false;
     float playerX;
     float playerY;
@@ -69,7 +70,7 @@ public class Sketch extends PApplet {
             fill(255, 0, 0);
             textSize(50);
             textAlign(CENTER, CENTER);
-            text("GAME OVER\nscore: " + score + "\nPress R to Restart", width / 2f, height / 2f);
+            text("GAME OVER\nScore: " + score + "\nHigh Score: " + highScore + "\nPress R to Restart", width / 2f, height / 2f);
             return; // Stop running the rest of the game
         }
 
@@ -86,6 +87,7 @@ public class Sketch extends PApplet {
         textSize(20);
         textAlign(LEFT, BASELINE);
         text("Score: " + score, 20, 30);
+        text("High Score: " + highScore, 20, 60);
     }
 
     //Core Mechanics (Update Methods)
@@ -111,9 +113,13 @@ public class Sketch extends PApplet {
             int hp = meteorHP.get(i);
             float size = meteorSize.get(i);
 
-            if (hp == 3) fill(180, 60, 60);       
-            else if (hp == 2) fill(180, 130, 60); 
-            else fill(120);                       
+            if (hp == 3) {
+                fill(180, 60, 60);
+            }else if (hp == 2){
+                fill(180, 130, 60); 
+            }else{
+                fill(120); 
+            }                  
             
             circle(currentX, currentY, size);
             
@@ -126,9 +132,12 @@ public class Sketch extends PApplet {
                 // Lose 10 points for every tier of HP the meteor had
                 score -= (meteorMaxHP.get(i) * 10); 
                 removeMeteor(i);
-                
+                if (score > highScore){
+                    highScore = score;
+                }
                 // Check if score dropped below 0
                 if (score < 0) {
+                    score = 0;
                     isGameOver = true;
                 }
             }
@@ -214,6 +223,9 @@ public class Sketch extends PApplet {
                     if (meteorHP.get(j) <= 0) {
                         score += (meteorMaxHP.get(j) * 10); 
                     removeMeteor(j);
+                        if (score > highScore){
+                            highScore = score;
+                        }
                     }
                     break; 
                 }
