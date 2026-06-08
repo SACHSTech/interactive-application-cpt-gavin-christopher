@@ -191,7 +191,7 @@ public class Sketch extends PApplet {
         for (int j = meteorX.size() - 1; j >= 0; j--) {
             float mX = meteorX.get(j);
             float mY = meteorY.get(j);
-            float mSize = 40;
+            float mSize = meteorSize.get(j);
 
             // 1. Check if meteor hit PLAYER
             float distToPlayer = dist(playerX, playerY, mX, mY);
@@ -249,6 +249,9 @@ public class Sketch extends PApplet {
             
             laserX.clear(); laserY.clear();
             meteorX.clear(); meteorY.clear();
+            meteorHP.clear(); meteorMaxHP.clear();
+            meteorSize.clear(); meteorSpeed.clear();
+
         }
 
     }
