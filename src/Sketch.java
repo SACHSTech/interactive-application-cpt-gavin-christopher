@@ -23,7 +23,7 @@ public class Sketch extends PApplet {
     boolean isGameOver = false;
     float playerX;
     float playerY;
-    float playerSpeed = 5;
+    float playerSpeed = 6;
     boolean movingLeft = false;
     boolean movingRight = false;
     
