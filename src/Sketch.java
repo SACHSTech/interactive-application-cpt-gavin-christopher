@@ -38,11 +38,16 @@ public class Sketch extends PApplet {
     ArrayList<Float> laserX;
     ArrayList<Float> laserY;
 
+    //Sets up the initial canvas size for the game.
     @Override
     public void settings() {
         size(800, 600); 
     }
 
+    /**
+     * Runs once at the start of the program.
+     * Initializes player starting coordinates and instantiates all parallel ArrayLists
+     */
     @Override
     public void setup() {
         playerX = width / 2f;
@@ -60,6 +65,10 @@ public class Sketch extends PApplet {
         meteorSpeed = new ArrayList<Float>();
     }
 
+    /**
+     * The main game loop that runs continuously.
+     * Handles background drawing, game states (Game Over vs Active), and delegates updates/drawing to helper methods.
+     */
     @Override
     public void draw() {
         background(0); // Plain black background
@@ -96,6 +105,10 @@ public class Sketch extends PApplet {
 
     //Core Mechanics (Update Methods)
 
+    /**
+     * Updates the player's X coordinate based on boolean movement flags.
+     * Prevents the player from moving off the edge of the canvas.
+     */
     private void updatePlayer() {
         if (movingLeft && playerX > 20) {
             playerX -= playerSpeed;
@@ -105,6 +118,10 @@ public class Sketch extends PApplet {
         }
     }
 
+    /**
+     * Updates meteor positions, draws them to the screen, and handles logic for when they hit the bottom edge.
+     * Iterates backward through parallel lists to safely remove elements and apply score penalties.
+     */
     private void updateMeteors() {
         for (int i = meteorX.size() - 1; i >= 0; i--) {
             float currentY = meteorY.get(i);
@@ -148,6 +165,10 @@ public class Sketch extends PApplet {
         }
     }
 
+    /**
+     * Updates laser positions, draws them to the screen, and removes them if they fly off the top of the canvas.
+     * Iterates backward to safely remove elements from the parallel lists.
+     */
     private void updateLasers() {
         for (int i = laserX.size() - 1; i >= 0; i--) {
             float currentY = laserY.get(i);
@@ -164,6 +185,10 @@ public class Sketch extends PApplet {
         }
     }
 
+    /**
+     * Randomly spawns meteors at the top of the screen.
+     * Assigns randomized attributes (size, speed, health) and adds them to the respective parallel ArrayLists.
+     */
     private void spawnMeteors() {
         if (random(100) < 2) { // 2% chance to spawn per frame
             meteorX.add(random(30, width - 30));
@@ -186,11 +211,19 @@ public class Sketch extends PApplet {
         }
     }
 
+    /**
+     * Helper method to safely remove a laser from all associated parallel lists.
+     * @param index The index of the laser to remove.
+     */
     private void removeLaser(int index) {
         laserX.remove(index);
         laserY.remove(index);
     }
 
+    /**
+     * Helper method to safely remove a meteor from all associated parallel lists.
+     * @param index The index of the meteor to remove.
+     */
     private void removeMeteor(int index) {
         meteorX.remove(index);
         meteorY.remove(index);
@@ -200,6 +233,10 @@ public class Sketch extends PApplet {
         meteorSpeed.remove(index);
     }
 
+    /**
+     * Checks for intersections between game entities using the distance formula.
+     * Evaluates Player vs. Meteor (Game Over) and Laser vs. Meteor (Damage/Score tracking).
+     */
     private void checkCollisions() {
         for (int j = meteorX.size() - 1; j >= 0; j--) {
             float mX = meteorX.get(j);
@@ -231,13 +268,16 @@ public class Sketch extends PApplet {
                             highScore = score;
                         }
                     }
-                    break; 
+                    break; // Move to the next meteor since this laser is gone
                 }
             }
         }
     }
     //Basic Drawing
 
+    /**
+     * Draws the player ship on the canvas.
+     */
     private void drawEntities() {
         // Draw Player (White Triangle)
         fill(255); 
@@ -246,6 +286,10 @@ public class Sketch extends PApplet {
 
     //Input Methods
 
+    /**
+     * Handles keyboard interactions when a key is pressed down.
+     * Manages movement flags, shooting mechanics, and the game reset trigger.
+     */
     public void keyPressed() {
         if (keyCode == LEFT) {
             movingLeft = true;
@@ -271,6 +315,11 @@ public class Sketch extends PApplet {
         }
 
     }
+
+    /**
+     * Handles keyboard interactions when a key is let go.
+     * Disables movement flags to allow for smooth player movement.
+     */
     public void keyReleased() {
         if (keyCode == LEFT) movingLeft = false;
         if (keyCode == RIGHT) movingRight = false;
