@@ -3,12 +3,16 @@
 
 This repository contains your ICS3U Culminating Performance Task (CPT).
 
-### Start here:
-Please read the full project instructions in **[INSTRUCTIONS.md](INSTRUCTIONS.md)**.
-
-Assessment criteria for this project are described in **[ASSESSMENT.md](ASSESSMENT.md)**.
-
-Once you are ready to submit, replace the contents of this README.md file with:
+### Space Defender
+## Description
+Space Defender is a 2D arcade-style shooting game built using Processing. The player controls a space ship at the bottom of the screen and must destroy falling meteors using lasers. Meteors vary in size and health, and the game becomes progressively more challenging as they spawn randomly and fall faster.
+The game includes a scoring system, high score tracking across play sessions, and penalty mechanics for missed meteors. The game ends if the player is hit by a meteor or if the score drops below zero.
+## How the user interacts with it
+The user interacts with the game using the keyboard:
+- __Left Arrow Key__ -> Move to the Left
+- __Right Arrow Key__ -> Move to the Right
+- __Space Bar__ -> Shoot Lasers Upward
+- __R Key__ -> Restart the game after game over
 
 - a screenshot of your program in action
 - a brief description of your program
