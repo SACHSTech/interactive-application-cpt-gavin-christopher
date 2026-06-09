@@ -2,7 +2,7 @@
 # ICS3U CPT – Interactive Processing Project
 
 This repository contains your ICS3U Culminating Performance Task (CPT).
-
+!(<img width="800" height="595" alt="Image" src="https://github.com/user-attachments/assets/96ba781f-061c-4d1b-b2bf-e62a7dde7afd" />)
 ## Space Defender
 ### Description
 Space Defender is a 2D arcade-style shooting game built using Processing. The player controls a space ship at the bottom of the screen and must destroy falling meteors using lasers. Meteors vary in size and health, and the game becomes progressively more challenging as they spawn randomly and fall faster.
