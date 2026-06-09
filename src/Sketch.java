@@ -58,8 +58,6 @@ public class Sketch extends PApplet {
         meteorMaxHP = new ArrayList<Integer>();
         meteorSize = new ArrayList<Float>();
         meteorSpeed = new ArrayList<Float>();
-
-        
     }
 
     @Override
@@ -88,6 +86,12 @@ public class Sketch extends PApplet {
         textAlign(LEFT, BASELINE);
         text("Score: " + score, 20, 30);
         text("High Score: " + highScore, 20, 60);
+
+        textSize(14);
+        fill(255, 255, 255, 150); 
+        textAlign(LEFT, BASELINE);
+        text("Controls: LEFT/RIGHT Arrows to move  |  SPACEBAR to shoot", 20, height - 10);
+
     }
 
     //Core Mechanics (Update Methods)
